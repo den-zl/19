@@ -317,6 +317,47 @@ void testAll_nonSymetricalMatrixesInTranspose() {
 }
 
 
+void testAll_creatingTeam() {
+    FILE *fp = fopen("binary_file_test1.bin", "wb");
+
+    int x = 8;
+    fwrite(&x, sizeof(int), 1, fp);
+
+    athletesInfo athletes[] = {{"John Smith 5\0", 5},
+                               {"John Smith 11\0", 11},
+                               {"John Smith 8\0", 8},
+                               {"John Smith 9\0", 9},
+                               {"John Smith 6\0", 6},
+                               {"John Smith 7\0", 7},
+                               {"John Smith 10\0", 10},
+                               {"John Smith 12\0", 12}};
+
+    fwrite(athletes, sizeof(athletesInfo), 8, fp);
+
+    fclose(fp);
+
+    creatingTeam("binary_file_test1.bin", 3);
+
+    FILE *fd = fopen("binary_file_test1.bin", "rb");
+    int n;
+    fread(&n, sizeof(int), 1, fd);
+    athletesInfo res[n];
+
+    int countRead = fread(res, sizeof(athletesInfo), n, fd);
+
+    athletesInfo expectedAthletes[] = {{"John Smith 12\0", 12},
+                                       {"John Smith 11\0", 11},
+                                       {"John Smith 10\0", 10}};
+    assert(3 == n);
+    assert(countRead == n);
+    for (int i = 0; i < countRead; i++) {
+        ASSERT_STRING(expectedAthletes[i].name, res[i].name);
+            assert(expectedAthletes[i].rating == res[i].rating);
+    }
+    fclose(fd);
+}
+
+
 void testFileAll() {
     testAll_rowsToColumnsInMatrix();
     testAll_exponentialNumToNum();
@@ -326,5 +367,6 @@ void testFileAll() {
     testAll_removeZeroPolynomial();
     testAll_binFileSort();
     testAll_nonSymetricalMatrixesInTranspose();
+    testAll_creatingTeam();
 
 }

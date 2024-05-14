@@ -15,6 +15,12 @@ typedef struct Polynomial {
 } Polynomial;
 
 
+typedef struct athletesInfo {
+    char name[256];
+    int rating;
+} athletesInfo;
+
+
 size_t readFileToBuff(char *filePath, char *buff, size_t buffSize);
 size_t readFileBinaryToBuff(char *filePath, char *buff, size_t buffSize);
 
@@ -34,6 +40,8 @@ void removeZeroPolynomial(char *filePath, int x);
 void binFileSort(char *filePath);
 
 void nonSymetricalMatrixesInTranspose(char *filePath);
+
+void creatingTeam(char *filePath, int neededAthletes);
 
 
 #endif

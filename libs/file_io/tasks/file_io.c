@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "file_io.h"
 #include <math.h>
+#include <unistd.h>
 #include "/Users/denzl/CLionProjects/2sem/19.19/lab_19/libs/data_structures/matrix/matrix.h"
 #include "/Users/denzl/CLionProjects/2sem/19.19/lab_19/libs/string/tasks/string_.h"
 
@@ -434,4 +435,35 @@ void nonSymetricalMatrixesInTranspose(char *filePath) {
 
     fclose(fp);
     freeMemMatrix(&matrix);
+}
+
+
+int compareAthletes(const void *intPtr1, const void *intPtr2) {
+    athletesInfo *a1 = (athletesInfo *)intPtr1;
+    athletesInfo *a2 = (athletesInfo *)intPtr2;
+
+    return a2->rating - a1->rating;
+}
+
+void creatingTeam(char *filePath, int neededAthletes) {
+    FILE *fp = fopen(filePath, "r+b");
+    if (fp == NULL) {
+        fprintf(stderr, "file cannot be opened");
+        exit(1);
+    }
+
+    int n;
+    fread(&n, sizeof(int), 1, fp);
+    athletesInfo res[n];
+
+    fread(res, sizeof(athletesInfo), n, fp);
+    qsort(res, n, sizeof(athletesInfo), compareAthletes);
+
+    fseek(fp, 0, SEEK_SET);
+    fwrite(&neededAthletes, sizeof(int), 1, fp);
+    fwrite(res, sizeof(athletesInfo), neededAthletes, fp);
+
+    ftruncate(fileno(fp), ftell(fp));
+
+    fclose(fp);
 }

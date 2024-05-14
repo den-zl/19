@@ -22,3 +22,11 @@
 297	319	1715682911399198000	libs/algorithms/libalgorithms.a	404b2f07980d8491
 2	204	1715708164287945058	libs/file_io/CMakeFiles/file_io.dir/tests/file_io_test.c.o	aab2136a8023da42
 0	61	1715682911071236609	build.ninja	67a971d8ecee123d
+1	202	1715710001832636185	CMakeFiles/lab.dir/main.c.o	e44c2b0df852e727
+1	206	1715710001837365943	libs/file_io/CMakeFiles/file_io.dir/tasks/file_io.c.o	f927b885327ebec6
+2	206	1715710001837094746	libs/file_io/CMakeFiles/file_io.dir/tests/file_io_test.c.o	aab2136a8023da42
+206	230	1715710001862766000	libs/file_io/libfile_io.a	53b87a3d7b066e86
+230	401	1715710002028221220	lab	d05ecea6f3638bb6
+2	213	1715710039493949544	libs/file_io/CMakeFiles/file_io.dir/tests/file_io_test.c.o	aab2136a8023da42
+213	232	1715710039515159000	libs/file_io/libfile_io.a	53b87a3d7b066e86
+232	383	1715710039662609847	lab	d05ecea6f3638bb6
