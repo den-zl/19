@@ -54,3 +54,8 @@
 1	41	1715694467133402173	libs/file_io/CMakeFiles/file_io.dir/tests/file_io_test.c.o	aab2136a8023da42
 41	58	1715694467152006000	libs/file_io/libfile_io.a	53b87a3d7b066e86
 58	92	1715694467183317182	lab	d05ecea6f3638bb6
+2	183	1715695104334412880	CMakeFiles/lab.dir/main.c.o	e44c2b0df852e727
+2	183	1715695104334581250	libs/file_io/CMakeFiles/file_io.dir/tests/file_io_test.c.o	aab2136a8023da42
+2	184	1715695104335675964	libs/file_io/CMakeFiles/file_io.dir/tasks/file_io.c.o	f927b885327ebec6
+184	203	1715695104356721000	libs/file_io/libfile_io.a	53b87a3d7b066e86
+203	363	1715695104511911892	lab	d05ecea6f3638bb6

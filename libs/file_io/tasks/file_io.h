@@ -16,5 +16,7 @@ size_t exponentialNumToNum(char *filePath, char *fileOutputPath);
 
 size_t saveFileWithMathematicalExpression(char *filePath, char *fileOutputPath);
 
+size_t saveFileWithRequiredLen(char *filePath, char *fileOutputPath, char *pattern);
+
 
 #endif

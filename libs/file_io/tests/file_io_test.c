@@ -97,9 +97,31 @@ void testAll_saveFileWithMathematicalExpression() {
 }
 
 
+void testAll_saveFileWithRequiredLen() {
+    FILE *fp = fopen ("file_test1.txt", "w+");
+    char word[4] = "bot";
+    for (int i = 0; i < 10; i++) {
+        if (i % 2 == 0) {
+            fputs("bot vdg uy\n", fp);
+        } else if (i % 3 == 0) {
+            fputs("rama ho isz\n", fp);
+        } else {
+            fputs("1z i7 bj\n", fp);
+        }
+    }
+    fclose(fp);
+    size_t res = saveFileWithRequiredLen("file_test1.txt", "file_test2.txt", word);
+    size_t fileSize = readFileToBuff("file_test2.txt", testBuff, sizeof(testBuff));
+    assert(res == 5);
+    assert(fileSize == 19);
+    ASSERT_STRING("bot bot bot bot bot", testBuff);
+}
+
+
 void testFileAll() {
     testAll_rowsToColumnsInMatrix();
     testAll_exponentialNumToNum();
     testAll_saveFileWithMathematicalExpression();
+    testAll_saveFileWithRequiredLen();
 
 }
