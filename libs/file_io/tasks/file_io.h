@@ -14,5 +14,7 @@ void rowsToColumnsInMatrix(char *filePath);
 
 size_t exponentialNumToNum(char *filePath, char *fileOutputPath);
 
+size_t saveFileWithMathematicalExpression(char *filePath, char *fileOutputPath);
+
 
 #endif

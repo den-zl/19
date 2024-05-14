@@ -8,6 +8,7 @@
 
 char testBuff[MAX_LINE_SIZE];
 
+
 void testAll_rowsToColumnsInMatrix() {
     FILE *fp = fopen ("file_test1.txt", "w+");
 
@@ -33,6 +34,7 @@ void testAll_rowsToColumnsInMatrix() {
                   "15 25 35 45 55 \n", testBuff);
 }
 
+
 void testAll_exponentialNumToNum() {
     FILE *fp = fopen ("file_test1.txt", "w+");
     for (int i = 0; i < 10; i++) {
@@ -55,8 +57,49 @@ void testAll_exponentialNumToNum() {
                   "976868800.00\n", testBuff);
 }
 
+
+void testAll_saveFileWithMathematicalExpression() {
+    FILE *fp = fopen ("file_test1.txt", "w+");
+    for (int i = 0; i < 10; i++) {
+        if (i % 2 == 0) {
+            fprintf(fp, "2 + %d\n", i, i);
+        } else if (i % 3 == 0) {
+            fprintf(fp, "9 - %d * %d\n", i, i);
+        } else {
+            fprintf(fp, "%d + %d / 5\n", i, i);
+        }
+    }
+    fclose(fp);
+    size_t res = saveFileWithMathematicalExpression("file_test1.txt", "file_test1.txt");
+    size_t fileSize = readFileToBuff("file_test1.txt", testBuff, sizeof(testBuff));
+    assert(res == 10);
+    assert(fileSize == 103);
+    ASSERT_STRING("2 + 0\n"
+                  "1 + 1 / 5\n"
+                  "2 + 2\n"
+                  "9 - 3 * 3\n"
+                  "2 + 4\n"
+                  "5 + 5 / 5\n"
+                  "2 + 6\n"
+                  "7 + 7 / 5\n"
+                  "2 + 8\n"
+                  "9 - 9 * 9\n"
+                  "2\n"
+                  "1\n"
+                  "4\n"
+                  "0\n"
+                  "6\n"
+                  "6\n"
+                  "8\n"
+                  "8\n"
+                  "10\n"
+                  "-72\n", testBuff);
+}
+
+
 void testFileAll() {
     testAll_rowsToColumnsInMatrix();
     testAll_exponentialNumToNum();
+    testAll_saveFileWithMathematicalExpression();
 
 }
