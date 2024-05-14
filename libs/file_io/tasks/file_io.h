@@ -20,6 +20,18 @@ typedef struct athletesInfo {
     int rating;
 } athletesInfo;
 
+typedef struct goodsInStockInfo {
+    char name[256];
+    int priceForOne;
+    int totalPrice;
+    int quantity;
+} goodsInStockInfo;
+
+typedef struct orderInfo {
+    char name[256];
+    int quantity;
+} orderInfo;
+
 
 size_t readFileToBuff(char *filePath, char *buff, size_t buffSize);
 size_t readFileBinaryToBuff(char *filePath, char *buff, size_t buffSize);
@@ -42,6 +54,8 @@ void binFileSort(char *filePath);
 void nonSymetricalMatrixesInTranspose(char *filePath);
 
 void creatingTeam(char *filePath, int neededAthletes);
+
+void ordersInfo(char *filePath1, char *filePath2);
 
 
 #endif

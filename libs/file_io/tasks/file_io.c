@@ -3,6 +3,7 @@
 #include "file_io.h"
 #include <math.h>
 #include <unistd.h>
+#include <string.h>
 #include "/Users/denzl/CLionProjects/2sem/19.19/lab_19/libs/data_structures/matrix/matrix.h"
 #include "/Users/denzl/CLionProjects/2sem/19.19/lab_19/libs/string/tasks/string_.h"
 
@@ -466,4 +467,62 @@ void creatingTeam(char *filePath, int neededAthletes) {
     ftruncate(fileno(fp), ftell(fp));
 
     fclose(fp);
+}
+
+
+void ordersInfo(char *filePath1, char *filePath2) {
+    FILE *fp1 = fopen(filePath1, "r+b");
+    if (fp1 == NULL) {
+        fprintf(stderr, "file cannot be opened");
+        exit(1);
+    }
+    FILE *fp2 = fopen(filePath2, "r+b");
+    if (fp2 == NULL) {
+        fprintf(stderr, "file cannot be opened");
+        exit(1);
+    }
+
+    int n1;
+    fread(&n1, sizeof(int), 1, fp1);
+    goodsInStockInfo res1[n1];
+    int n2;
+    fread(&n2, sizeof(int), 1, fp2);
+    orderInfo res2[n2];
+
+    fread(res1, sizeof(goodsInStockInfo), n1, fp1);
+    fread(res2, sizeof(orderInfo), n2, fp2);
+
+    fclose(fp1);
+    fclose(fp2);
+
+    int counter = 0;
+    int result;
+    for (int i = 0; i < n1; i++) {
+        for (int j = 0; j < n2; j++) {
+            result = strcmp(res1[i].name, res2[j].name);
+
+            if (result != 0) {
+                continue;
+            }
+
+            res1[i].quantity -= res2[j].quantity;
+            if (res1[i].quantity > 0) {
+                counter++;
+            }
+        }
+    }
+
+    FILE *fw1 = fopen(filePath1, "wb");
+    if (fp1 == NULL) {
+        fprintf(stderr, "file cannot be opened");
+        exit(1);
+    }
+
+    fwrite(&counter,  sizeof(int), 1, fw1);
+    for (int i = 0; i < n1; i++) {
+        if (res1[i].quantity > 0) {
+            fwrite(&res1[i], sizeof(goodsInStockInfo), 1, fw1);
+        }
+    }
+    fclose(fw1);
 }

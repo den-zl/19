@@ -352,7 +352,60 @@ void testAll_creatingTeam() {
     assert(countRead == n);
     for (int i = 0; i < countRead; i++) {
         ASSERT_STRING(expectedAthletes[i].name, res[i].name);
-            assert(expectedAthletes[i].rating == res[i].rating);
+        assert(expectedAthletes[i].rating == res[i].rating);
+    }
+    fclose(fd);
+}
+
+
+void testAll_ordersInfo() {
+    FILE *fp1 = fopen("binary_file_test1.bin", "wb");
+    FILE *fp2 = fopen("binary_file_test2.bin", "wb");
+
+    goodsInStockInfo goodsInfo[] = {{"Apples\0", 5, 100, 8},
+                                    {"Beer\0", 15, 150, 30},
+                                    {"carrots\0", 3, 50, 100},
+                                    {"potato\0", 10, 70, 200},
+                                    {"cheese\0", 40, 500, 10},
+                                    {"beef\0", 100, 1000, 21}};
+
+    orderInfo orders[] = {{"Apples\0", 5},
+                          {"beef\0", 21},
+                          {"carrots\0", 100},
+                          {"cheese\0", 10},
+                          {"potato\0", 40},
+                          {"Beer\0", 21}};
+
+    int x1 = sizeof(goodsInfo) / sizeof(goodsInStockInfo);
+    fwrite(&x1, sizeof(int), 1, fp1);
+
+    int x2 = sizeof(orders) / sizeof(orderInfo);
+    fwrite(&x2, sizeof(int), 1, fp2);
+
+    fwrite(goodsInfo, sizeof(goodsInStockInfo), x1, fp1);
+    fclose(fp1);
+    fwrite(orders, sizeof(orderInfo), x2, fp2);
+    fclose(fp2);
+
+    ordersInfo("binary_file_test1.bin", "binary_file_test2.bin");
+
+    FILE *fd = fopen("binary_file_test1.bin", "rb");
+    int n;
+    fread(&n, sizeof(int), 1, fd);
+    goodsInStockInfo res[n];
+
+    int countRead = fread(res, sizeof(goodsInStockInfo), n, fd);
+
+    goodsInStockInfo expected[] = {{"Apples\0", 5, 100, 3},
+                                   {"Beer\0", 15, 150, 9},
+                                   {"potato\0", 10, 70, 160}};
+    assert((sizeof(expected) / sizeof(goodsInStockInfo)) == n);
+    assert(countRead == n);
+    for (int i = 0; i < countRead; i++) {
+        ASSERT_STRING(expected[i].name, res[i].name);
+        assert(expected[i].priceForOne == res[i].priceForOne);
+        assert(expected[i].totalPrice == res[i].totalPrice);
+        assert(expected[i].quantity == res[i].quantity);
     }
     fclose(fd);
 }
@@ -368,5 +421,5 @@ void testFileAll() {
     testAll_binFileSort();
     testAll_nonSymetricalMatrixesInTranspose();
     testAll_creatingTeam();
-
+    testAll_ordersInfo();
 }
