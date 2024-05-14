@@ -137,11 +137,57 @@ void testAll_saveFileWithLongestWord() {
 }
 
 
+void testAll_removeZeroPolynomial() {
+    FILE *fp = fopen("binary_file_test1.bin", "wb");
+
+    int x = 4;
+    Polynomial poly[] = {{3,  1},
+                         {2,  1},
+                         {1,  1},
+                         {0,  1},
+                         {5,  1},
+                         {4,  2},
+                         {1,  1},
+                         {0,  2},
+                         {7,  1},
+                         {5,  1},
+                         {3,  1},
+                         {0,  1},
+                         {19, 1},
+                         {5,  1},
+                         {8,  1},
+                         {0,  1}};
+
+    fwrite(poly, sizeof(Polynomial), sizeof(poly) / sizeof(Polynomial), fp);
+    fclose(fp);
+
+    removeZeroPolynomial("binary_file_test1.bin", -2);
+
+    FILE *fd = fopen("binary_file_test1.bin", "rb");
+
+    Polynomial res[100];
+
+    int countRead = fread(res, sizeof(Polynomial), sizeof(res) / sizeof(Polynomial), fd);
+
+    Polynomial expected[] = { {3, 1},{2, 1},{1, 1},{0, 1},
+                              {7, 1},{5, 1},{3, 1},{0, 1},
+                              {19, 1},{5, 1},{8, 1},{0, 1}};
+
+    assert((sizeof(expected) / sizeof(Polynomial)) == countRead);
+    for (int i = 0; i < countRead; i++) {
+        assert(expected[i].k == res[i].k);
+        assert(expected[i].pow == res[i].pow);
+    }
+    fclose(fd);
+}
+
+
 void testFileAll() {
     testAll_rowsToColumnsInMatrix();
     testAll_exponentialNumToNum();
     testAll_saveFileWithMathematicalExpression();
     testAll_saveFileWithRequiredLen();
     testAll_saveFileWithLongestWord();
+    testAll_removeZeroPolynomial();
 
 }

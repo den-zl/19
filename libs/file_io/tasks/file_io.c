@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "file_io.h"
+#include <math.h>
 #include "/Users/denzl/CLionProjects/2sem/19.19/lab_19/libs/data_structures/matrix/matrix.h"
 #include "/Users/denzl/CLionProjects/2sem/19.19/lab_19/libs/string/tasks/string_.h"
 
@@ -23,18 +24,10 @@ void rowsToColumnsInMatrix(char *filePath) {
         exit(1);
     }
 
-    int n;
-    int x;
+    int n, res;
     fscanf(fp, "%d", &n);
 
-    matrix matrix = getMemMatrix(n, n);
-
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            fscanf(fp, "%d", &x);
-            matrix.values[i][j] = x;
-        }
-    }
+    matrix matrix = readMatrixFromStream(fp, n, &res);
 
     fclose(fp);
 
@@ -55,6 +48,44 @@ void rowsToColumnsInMatrix(char *filePath) {
 
     fclose(fw);
     freeMemMatrix(&matrix);
+}
+
+matrix readMatrixFromStream(FILE *fp, int n, int *res) {
+    matrix matrix = getMemMatrix(n, n);
+
+    int x, count;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            count = fscanf(fp, "%d", &x);
+
+            if (count == 0) {
+                *res = 0;
+                return matrix;
+            }
+            matrix.values[i][j] = x;
+        }
+    }
+    *res = 1;
+    return matrix;
+}
+
+matrix readMatrixFromBinaryStream(FILE *fp, int n, int *res) {
+    matrix matrix = getMemMatrix(n, n);
+
+    int x, count;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            count = fread(&x, sizeof(int), 1, fp);
+
+            if (count == 0) {
+                *res = 0;
+                return matrix;
+            }
+            matrix.values[i][j] = x;
+        }
+    }
+    *res = 1;
+    return matrix;
 }
 
 
@@ -254,4 +285,47 @@ size_t saveFileWithLongestWord(char *file_path_in, char *file_path_out) {
     fclose(fp);
     fclose(fd);
     return counter;
+}
+
+
+void removeZeroPolynomial(char *filePath, int x) {
+    FILE *fp = fopen(filePath, "r+b");
+    if (fp == NULL) {
+        fprintf(stderr, "file cannot be opened");
+        exit(1);
+    }
+
+    Polynomial pols[1000];
+
+    int count = fread(&pols, sizeof(Polynomial), sizeof(pols) / sizeof(Polynomial), fp);
+    int sum = 0;
+    int startPolIdx = 0;
+    for (int i = 0; i < count; i++) {
+        Polynomial pol = pols[i];
+        sum += pol.k * pow(x, pol.pow);
+
+        if (pol.pow == 0) {
+            if (sum == 0) {
+                for (int j = startPolIdx; j <= i; j++) {
+                    pols[j].k = 0;
+                }
+            }
+            startPolIdx = i + 1;
+            sum = 0;
+        }
+    }
+    fclose(fp);
+
+    FILE *fw = fopen(filePath, "wb");
+    if (fp == NULL) {
+        fprintf(stderr, "file cannot be opened");
+        exit(1);
+    }
+
+    for (int i = 0; i < count; i++) {
+        if (pols[i].k != 0) {
+            fwrite(&pols[i], sizeof(Polynomial), 1, fw);
+        }
+    }
+    fclose(fw);
 }
