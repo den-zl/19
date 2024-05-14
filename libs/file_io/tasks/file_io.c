@@ -12,14 +12,17 @@ char _fileReadBuffer[MAX_LINE_SIZE];
 size_t readFileToBuff(char *filePath, char *buff, size_t buffSize) {
     FILE *f = fopen(filePath, "r");
     size_t size = fread(buff, sizeof(char), buffSize, f);
+
     fclose(f);
     buff[size] = '\0';
+
     return size;
 }
 
 size_t readFileBinaryToBuff(char *filePath, char *buff, size_t buffSize) {
     FILE *f = fopen(filePath, "rb");
     size_t size = fread(buff, sizeof(char), buffSize, f);
+
     fclose(f);
 
     return size;
@@ -83,6 +86,7 @@ matrix readMatrixFromBinaryStream(FILE *fp, int n, int *res) {
     matrix matrix = getMemMatrix(n, n);
 
     int x, count;
+
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             count = fread(&x, sizeof(int), 1, fp);
@@ -102,6 +106,7 @@ matrix readMatrixFromBinaryStream(FILE *fp, int n, int *res) {
 size_t exponentialNumToNum(char *file_path_in, char *file_path_out) {
     FILE *fp = fopen(file_path_in, "r");
     FILE *fd = fopen(file_path_out, "w+");
+
     if (fp == NULL) {
         fprintf(stderr, "file cannot be opened");
         exit(1);
@@ -110,13 +115,16 @@ size_t exponentialNumToNum(char *file_path_in, char *file_path_out) {
         fprintf(stderr, "file cannot be opened");
         exit(1);
     }
+
     size_t counter = 0;
     float val;
     while (fscanf(fp, "%e", &val) > 0) {
         fprintf(fd, "%.2f\n", val);
     }
+
     fclose(fp);
     fclose(fd);
+
     return counter;
 }
 
@@ -210,6 +218,7 @@ int isPatternInWord(WordDescriptor word, const char *pattern) {
                 return 1;
             }
             curPatternPtr += sizeof(char);
+
         } else if (counter > 0) {
             counter = 0;
             curPatternPtr = pattern;
@@ -237,8 +246,8 @@ size_t saveFileWithRequiredLen(char *file_path_in, char *file_path_out, char *pa
 
     while (fgets(_fileReadBuffer, sizeof(_fileReadBuffer), fp) != NULL) {
         clearBagOfWords(&words);
-
         getBagOfWords(&words, _fileReadBuffer);
+
         for (int i = 0; i < words.size; i++) {
             WordDescriptor currWord = words.words[i];
             if (isPatternInWord(currWord, pattern)) {
@@ -271,6 +280,7 @@ int compareWordDescriptorsByLen(const void *wordPtr1, const void *wordPtr2) {
 size_t saveFileWithLongestWord(char *file_path_in, char *file_path_out) {
     FILE *fp = fopen(file_path_in, "r");
     FILE *fd = fopen(file_path_out, "w+");
+
     if (fp == NULL) {
         fprintf(stderr, "file cannot be opened");
         exit(1);
@@ -279,27 +289,33 @@ size_t saveFileWithLongestWord(char *file_path_in, char *file_path_out) {
         fprintf(stderr, "file cannot be opened");
         exit(1);
     }
+
     size_t counter = 0;
     BagOfWords words;
+
     while (fgets(_fileReadBuffer, sizeof(_fileReadBuffer), fp) != NULL) {
         clearBagOfWords(&words);
         getBagOfWords(&words, _fileReadBuffer);
         qsort(words.words, words.size, sizeof(WordDescriptor), compareWordDescriptorsByLen);
         WordDescriptor currWord = words.words[0];
+
         if (counter > 0) {
             fputc(' ', fd);
         }
         fwrite(currWord.begin, currWord.end - currWord.begin, 1, fd);
         counter++;
     }
+
     fclose(fp);
     fclose(fd);
+
     return counter;
 }
 
 
 void removeZeroPolynomial(char *filePath, int x) {
     FILE *fp = fopen(filePath, "r+b");
+
     if (fp == NULL) {
         fprintf(stderr, "file cannot be opened");
         exit(1);
@@ -310,6 +326,7 @@ void removeZeroPolynomial(char *filePath, int x) {
     int count = fread(&pols, sizeof(Polynomial), sizeof(pols) / sizeof(Polynomial), fp);
     int sum = 0;
     int startPolIdx = 0;
+
     for (int i = 0; i < count; i++) {
         Polynomial pol = pols[i];
         sum += pol.k * pow(x, pol.pow);
@@ -324,6 +341,7 @@ void removeZeroPolynomial(char *filePath, int x) {
             sum = 0;
         }
     }
+
     fclose(fp);
 
     FILE *fw = fopen(filePath, "wb");
@@ -337,6 +355,7 @@ void removeZeroPolynomial(char *filePath, int x) {
             fwrite(&pols[i], sizeof(Polynomial), 1, fw);
         }
     }
+
     fclose(fw);
 }
 
@@ -385,6 +404,7 @@ long getFileSize(FILE *fp) {
 
 void nonSymetricalMatrixesInTranspose(char *filePath) {
     FILE *fp = fopen(filePath, "r+b");
+
     if (fp == NULL) {
         fprintf(stderr, "file cannot be opened");
         exit(1);
@@ -400,6 +420,7 @@ void nonSymetricalMatrixesInTranspose(char *filePath) {
     fpos_t posInStream;
     int posRes;
     bool isSymmetric;
+
     do {
         posRes = fgetpos(fp, &posInStream);
         if (posInStream >= size) {
@@ -448,6 +469,7 @@ int compareAthletes(const void *intPtr1, const void *intPtr2) {
 
 void creatingTeam(char *filePath, int neededAthletes) {
     FILE *fp = fopen(filePath, "r+b");
+
     if (fp == NULL) {
         fprintf(stderr, "file cannot be opened");
         exit(1);
@@ -472,11 +494,14 @@ void creatingTeam(char *filePath, int neededAthletes) {
 
 void ordersInfo(char *filePath1, char *filePath2) {
     FILE *fp1 = fopen(filePath1, "r+b");
+
     if (fp1 == NULL) {
         fprintf(stderr, "file cannot be opened");
         exit(1);
     }
+
     FILE *fp2 = fopen(filePath2, "r+b");
+
     if (fp2 == NULL) {
         fprintf(stderr, "file cannot be opened");
         exit(1);
@@ -485,6 +510,7 @@ void ordersInfo(char *filePath1, char *filePath2) {
     int n1;
     fread(&n1, sizeof(int), 1, fp1);
     goodsInStockInfo res1[n1];
+
     int n2;
     fread(&n2, sizeof(int), 1, fp2);
     orderInfo res2[n2];
@@ -497,6 +523,7 @@ void ordersInfo(char *filePath1, char *filePath2) {
 
     int counter = 0;
     int result;
+
     for (int i = 0; i < n1; i++) {
         for (int j = 0; j < n2; j++) {
             result = strcmp(res1[i].name, res2[j].name);

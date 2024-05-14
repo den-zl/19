@@ -1,6 +1,7 @@
 #ifndef LAB_FILE_IO_H
 #define LAB_FILE_IO_H
 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "/Users/denzl/CLionProjects/2sem/19.19/lab_19/libs/data_structures/matrix/matrix.h"
@@ -13,7 +14,6 @@ typedef struct Polynomial {
     int pow;
     int k;
 } Polynomial;
-
 
 typedef struct athletesInfo {
     char name[256];

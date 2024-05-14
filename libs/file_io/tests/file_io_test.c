@@ -6,8 +6,8 @@
 #include "/Users/denzl/CLionProjects/2sem/19.19/lab_19/libs/string/tests/string_test.h"
 #include "/Users/denzl/CLionProjects/2sem/19.19/lab_19/libs/string/tasks/string_.h"
 
-char testBuff[MAX_LINE_SIZE];
 
+char testBuff[MAX_LINE_SIZE];
 
 void testAll_rowsToColumnsInMatrix() {
     FILE *fp = fopen ("file_test1.txt", "w+");
@@ -41,6 +41,7 @@ void testAll_exponentialNumToNum() {
         fprintf(fp, "0.%d7686878468e+%d\n", i, i);
     }
     fclose(fp);
+
     size_t res = exponentialNumToNum("file_test1.txt", "file_test2.txt");
     size_t fileSize = readFileToBuff("file_test2.txt", testBuff, sizeof(testBuff));
     assert(res == 0);
@@ -70,6 +71,7 @@ void testAll_saveFileWithMathematicalExpression() {
         }
     }
     fclose(fp);
+
     size_t res = saveFileWithMathematicalExpression("file_test1.txt", "file_test1.txt");
     size_t fileSize = readFileToBuff("file_test1.txt", testBuff, sizeof(testBuff));
     assert(res == 10);
@@ -110,6 +112,7 @@ void testAll_saveFileWithRequiredLen() {
         }
     }
     fclose(fp);
+
     size_t res = saveFileWithRequiredLen("file_test1.txt", "file_test2.txt", word);
     size_t fileSize = readFileToBuff("file_test2.txt", testBuff, sizeof(testBuff));
     assert(res == 5);
@@ -129,6 +132,7 @@ void testAll_saveFileWithLongestWord() {
         }
     }
     fclose(fp);
+
     size_t res = saveFileWithLongestWord("file_test1.txt", "file_test2.txt");
     size_t fileSize = readFileToBuff("file_test2.txt", testBuff, sizeof(testBuff));
     assert(res == 10);
@@ -249,7 +253,6 @@ void testAll_nonSymetricalMatrixesInTranspose() {
     size_t fileSize = readFileBinaryToBuff("binary_file_test1.bin", testBuff, sizeof(testBuff));
 
     int expected[] = {5,
-
                       11, 21, 31, 41, 51,
                       12, 22, 32, 42, 52,
                       13, 23, 33, 43, 53,
@@ -399,6 +402,7 @@ void testAll_ordersInfo() {
     goodsInStockInfo expected[] = {{"Apples\0", 5, 100, 3},
                                    {"Beer\0", 15, 150, 9},
                                    {"potato\0", 10, 70, 160}};
+
     assert((sizeof(expected) / sizeof(goodsInStockInfo)) == n);
     assert(countRead == n);
     for (int i = 0; i < countRead; i++) {
