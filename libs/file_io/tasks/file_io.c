@@ -55,3 +55,24 @@ void rowsToColumnsInMatrix(char *filePath) {
     fclose(fw);
     freeMemMatrix(&matrix);
 }
+
+size_t exponentialNumToNum(char *file_path_in, char *file_path_out) {
+    FILE *fp = fopen(file_path_in, "r");
+    FILE *fd = fopen(file_path_out, "w+");
+    if (fp == NULL) {
+        fprintf(stderr, "file cannot be opened");
+        exit(1);
+    }
+    if (fd == NULL) {
+        fprintf(stderr, "file cannot be opened");
+        exit(1);
+    }
+    size_t counter = 0;
+    float val;
+    while (fscanf(fp, "%e", &val) > 0) {
+        fprintf(fd, "%.2f\n", val);
+    }
+    fclose(fp);
+    fclose(fd);
+    return counter;
+}

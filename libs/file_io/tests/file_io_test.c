@@ -8,7 +8,7 @@
 
 char testBuff[MAX_LINE_SIZE];
 
-FILE testAll_rowsToColumnsInMatrix() {
+void testAll_rowsToColumnsInMatrix() {
     FILE *fp = fopen ("file_test1.txt", "w+");
 
     fprintf(fp, "%d\n", 5);
@@ -33,8 +33,30 @@ FILE testAll_rowsToColumnsInMatrix() {
                   "15 25 35 45 55 \n", testBuff);
 }
 
+void testAll_exponentialNumToNum() {
+    FILE *fp = fopen ("file_test1.txt", "w+");
+    for (int i = 0; i < 10; i++) {
+        fprintf(fp, "0.%d7686878468e+%d\n", i, i);
+    }
+    fclose(fp);
+    size_t res = exponentialNumToNum("file_test1.txt", "file_test2.txt");
+    size_t fileSize = readFileToBuff("file_test2.txt", testBuff, sizeof(testBuff));
+    assert(res == 0);
+    assert(fileSize == 86);
+    ASSERT_STRING("0.08\n"
+                  "1.77\n"
+                  "27.69\n"
+                  "376.87\n"
+                  "4768.69\n"
+                  "57686.88\n"
+                  "676868.81\n"
+                  "7768688.00\n"
+                  "87686880.00\n"
+                  "976868800.00\n", testBuff);
+}
 
 void testFileAll() {
     testAll_rowsToColumnsInMatrix();
+    testAll_exponentialNumToNum();
 
 }

@@ -12,5 +12,7 @@ size_t readFileToBuff(char *filePath, char *buff, size_t buffSize);
 
 void rowsToColumnsInMatrix(char *filePath);
 
+size_t exponentialNumToNum(char *filePath, char *fileOutputPath);
+
 
 #endif
