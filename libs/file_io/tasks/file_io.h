@@ -16,6 +16,7 @@ typedef struct Polynomial {
 
 
 size_t readFileToBuff(char *filePath, char *buff, size_t buffSize);
+size_t readFileBinaryToBuff(char *filePath, char *buff, size_t buffSize);
 
 void rowsToColumnsInMatrix(char *filePath);
 matrix readMatrixFromStream(FILE *fp, int n, int *res);
@@ -29,6 +30,8 @@ size_t saveFileWithRequiredLen(char *filePath, char *fileOutputPath, char *patte
 size_t saveFileWithLongestWord(char *filePath, char *fileOutputPath);
 
 void removeZeroPolynomial(char *filePath, int x);
+
+void binFileSort(char *filePath);
 
 
 #endif
