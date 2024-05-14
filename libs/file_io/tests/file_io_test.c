@@ -206,6 +206,117 @@ void testAll_binFileSort() {
 }
 
 
+void testAll_nonSymetricalMatrixesInTranspose() {
+    FILE *fp = fopen("binary_file_test1.bin", "wb");
+
+    int x = 5;
+    fwrite(&x, sizeof(int), 1, fp);
+
+    int val;
+    for (int z = 0; z < 10; z++) {
+        if (z % 2 == 0) {
+            for (int i = 1; i <= 5; i++) {
+                for (int j = 1; j <= 5; j++) {
+                    val = i * 10 + j;
+                    fwrite(&val, sizeof(int), 1, fp);
+                }
+            }
+        } else if (z % 3 == 0) {
+            for (int i = 2; i <= 6; i++) {
+                for (int j = 2; j <= 6; j++) {
+                    val = i * 10 + j;
+                    fwrite(&val, sizeof(int), 1, fp);
+                }
+            }
+        } else {
+            int arrSymMatr[] = {10 , 0, 5, 2, 0,
+                                0, 10, 0, 5, 2,
+                                5, 0, 10, 0, 5,
+                                2, 5,0, 10, 0,
+                                0, 2, 5, 0 ,10};
+            matrix m = createMatrixFromArray(arrSymMatr, 5, 5);
+            for (int i = 0; i < 5; i++) {
+                for (int j = 0; j < 5; j++) {
+                    fwrite(&m.values[i][j], sizeof(int), 1, fp);
+                }
+            }
+            freeMemMatrix(&m);
+        }
+    }
+    fclose(fp);
+
+    nonSymetricalMatrixesInTranspose("binary_file_test1.bin");
+    size_t fileSize = readFileBinaryToBuff("binary_file_test1.bin", testBuff, sizeof(testBuff));
+
+    int expected[] = {5,
+
+                      11, 21, 31, 41, 51,
+                      12, 22, 32, 42, 52,
+                      13, 23, 33, 43, 53,
+                      14, 24, 34, 44, 54,
+                      15, 25, 35, 45, 55,
+
+                      10, 0, 5, 2, 0,
+                      0, 10, 0, 5, 2,
+                      5, 0, 10, 0, 5,
+                      2, 5, 0, 10, 0,
+                      0, 2, 5, 0, 10,
+
+                      11, 21, 31, 41, 51,
+                      12, 22, 32, 42, 52,
+                      13, 23, 33, 43, 53,
+                      14, 24, 34, 44, 54,
+                      15, 25, 35, 45, 55,
+
+                      22, 32, 42, 52, 62,
+                      23, 33, 43, 53, 63,
+                      24, 34, 44, 54, 64,
+                      25, 35, 45, 55, 65,
+                      26, 36, 46, 56, 66,
+
+                      11, 21, 31, 41, 51,
+                      12, 22, 32, 42, 52,
+                      13, 23, 33, 43, 53,
+                      14, 24, 34, 44, 54,
+                      15, 25, 35, 45, 55,
+
+                      10, 0, 5, 2, 0,
+                      0, 10, 0, 5, 2,
+                      5, 0, 10, 0, 5,
+                      2, 5, 0, 10, 0,
+                      0, 2, 5, 0, 10,
+
+                      11, 21, 31, 41, 51,
+                      12, 22, 32, 42, 52,
+                      13, 23, 33, 43, 53,
+                      14, 24, 34, 44, 54,
+                      15, 25, 35, 45, 55,
+
+                      10, 0, 5, 2, 0,
+                      0, 10, 0, 5, 2,
+                      5, 0, 10, 0, 5,
+                      2, 5, 0, 10, 0,
+                      0, 2, 5, 0, 10,
+
+                      11, 21, 31, 41, 51,
+                      12, 22, 32, 42, 52,
+                      13, 23, 33, 43, 53,
+                      14, 24, 34, 44, 54,
+                      15, 25, 35, 45, 55,
+
+                      22, 32, 42, 52, 62,
+                      23, 33, 43, 53, 63,
+                      24, 34, 44, 54, 64,
+                      25, 35, 45, 55, 65,
+                      26, 36, 46, 56, 66};
+
+    assert(fileSize == sizeof(expected));
+    for (size_t i = 0; i < fileSize / sizeof(int); i++) {
+        assert(((int *) testBuff)[i] == expected[i]);
+    }
+}
+
+
 void testFileAll() {
     testAll_rowsToColumnsInMatrix();
     testAll_exponentialNumToNum();
@@ -214,5 +325,6 @@ void testFileAll() {
     testAll_saveFileWithLongestWord();
     testAll_removeZeroPolynomial();
     testAll_binFileSort();
+    testAll_nonSymetricalMatrixesInTranspose();
 
 }

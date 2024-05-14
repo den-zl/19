@@ -372,3 +372,66 @@ void binFileSort(char *filePath) {
     }
     fclose(fp);
 }
+
+
+long getFileSize(FILE *fp) {
+    fseek(fp, 0, SEEK_END); // seek to end of file
+    long size = ftell(fp); // get current file pointer
+    fseek(fp, 0, SEEK_SET);
+    return size;
+}
+
+void nonSymetricalMatrixesInTranspose(char *filePath) {
+    FILE *fp = fopen(filePath, "r+b");
+    if (fp == NULL) {
+        fprintf(stderr, "file cannot be opened");
+        exit(1);
+    }
+
+    long size = getFileSize(fp);
+
+    int n, res;
+    fread(&n, sizeof(int), 1, fp);
+
+    matrix matrix;
+
+    fpos_t posInStream;
+    int posRes;
+    bool isSymmetric;
+    do {
+        posRes = fgetpos(fp, &posInStream);
+        if (posInStream >= size) {
+            break;
+        }
+
+        if (posRes) {
+            fprintf(stderr, "filed to get pos");
+            exit(1);
+        }
+
+        matrix = readMatrixFromBinaryStream(fp, n, &res);
+        if (!res) {
+            break;
+        }
+
+        isSymmetric = isSymmetricMatrix(&matrix);
+        if (!isSymmetric) {
+            transposeSquareMatrix(&matrix);
+
+            posRes = fsetpos(fp, &posInStream);
+            if (posRes) {
+                fprintf(stderr, "filed to get pos");
+                exit(1);
+            }
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    fwrite(&matrix.values[i][j], sizeof(int), 1, fp);
+                }
+            }
+            fflush(fp);
+        }
+    } while (res);
+
+    fclose(fp);
+    freeMemMatrix(&matrix);
+}

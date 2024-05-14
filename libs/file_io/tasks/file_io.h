@@ -33,5 +33,7 @@ void removeZeroPolynomial(char *filePath, int x);
 
 void binFileSort(char *filePath);
 
+void nonSymetricalMatrixesInTranspose(char *filePath);
+
 
 #endif
