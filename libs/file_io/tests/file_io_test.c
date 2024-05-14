@@ -117,11 +117,31 @@ void testAll_saveFileWithRequiredLen() {
     ASSERT_STRING("bot bot bot bot bot", testBuff);
 }
 
+void testAll_saveFileWithLongestWord() {
+    FILE *fp = fopen ("file_test1.txt", "w+");
+    for (int i = 0; i < 10; i++) {
+        if (i % 2 == 0) {
+            fputs("hasfa hg jui\n", fp);
+        } else if (i % 3 == 0) {
+            fputs("bhy gamma po\n", fp);
+        } else {
+            fputs("dd ll rock\n", fp);
+        }
+    }
+    fclose(fp);
+    size_t res = saveFileWithLongestWord("file_test1.txt", "file_test2.txt");
+    size_t fileSize = readFileToBuff("file_test2.txt", testBuff, sizeof(testBuff));
+    assert(res == 10);
+    assert(fileSize == 56);
+    ASSERT_STRING("hasfa rock hasfa gamma hasfa rock hasfa rock hasfa gamma", testBuff);
+}
+
 
 void testFileAll() {
     testAll_rowsToColumnsInMatrix();
     testAll_exponentialNumToNum();
     testAll_saveFileWithMathematicalExpression();
     testAll_saveFileWithRequiredLen();
+    testAll_saveFileWithLongestWord();
 
 }

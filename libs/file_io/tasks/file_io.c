@@ -215,3 +215,43 @@ size_t saveFileWithRequiredLen(char *file_path_in, char *file_path_out, char *pa
 
     return counter;
 }
+
+
+int compareWordDescriptorsByLen(const void *wordPtr1, const void *wordPtr2) {
+    WordDescriptor *word1 = (WordDescriptor *)wordPtr1;
+    WordDescriptor *word2 = (WordDescriptor *)wordPtr2;
+
+    unsigned long len1 = word1->end - word1->begin;
+    unsigned long len2 = word2->end - word2->begin;
+
+    return len2 - len1;
+}
+
+size_t saveFileWithLongestWord(char *file_path_in, char *file_path_out) {
+    FILE *fp = fopen(file_path_in, "r");
+    FILE *fd = fopen(file_path_out, "w+");
+    if (fp == NULL) {
+        fprintf(stderr, "file cannot be opened");
+        exit(1);
+    }
+    if (fd == NULL) {
+        fprintf(stderr, "file cannot be opened");
+        exit(1);
+    }
+    size_t counter = 0;
+    BagOfWords words;
+    while (fgets(_fileReadBuffer, sizeof(_fileReadBuffer), fp) != NULL) {
+        clearBagOfWords(&words);
+        getBagOfWords(&words, _fileReadBuffer);
+        qsort(words.words, words.size, sizeof(WordDescriptor), compareWordDescriptorsByLen);
+        WordDescriptor currWord = words.words[0];
+        if (counter > 0) {
+            fputc(' ', fd);
+        }
+        fwrite(currWord.begin, currWord.end - currWord.begin, 1, fd);
+        counter++;
+    }
+    fclose(fp);
+    fclose(fd);
+    return counter;
+}
